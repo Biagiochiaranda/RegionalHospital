@@ -1,0 +1,78 @@
+ospedali:
+Ogni ospedale é : 
+- caratterizzato da: 
+	- un codice, 
+	- un nome 
+	- un indirizzo
+- composto da reparti (cardiologia, ortopedia, medicina generale, …).
+Alcuni ospedali offrono anche un servizio di pronto soccorso: 
+Per gli ospedali dotati di pronto soccorso interessano: 
+- i turni del personale che vi presta servizio, ovvero medici ed infermieri,
+- ulteriori attributi utili/necessari a caratterizzare lo scenario in esame.
+
+reparti:
+Ogni reparto è identificato da: 
+- nome e dal relativo ospedale di appartenenza;
+- un numero di telefono
+- l’orario di visita dei familiari dei pazienti ricoverati.
+- sale operatorie (solo per alcuni reparti).
+Nei reparti ci lavora il personale, costituito da: 
+	- infermieri
+	- personale amministrativo
+	- personale medico.
+	(- OSS)
+ogni reparto ha: 
+- ha un unico primario 
+- diversi vice primari 
+I reparti che prevedono il ricovero dei pazienti hanno delle stanze, queste sono caratterizzate da:
+	- numero,
+	- numero di letti che possono essere liberi o occupati da pazienti.
+
+personale medico:
+Il personale medico di ogni reparto è caratterizzato da: 
+- l’anzianità di servizio 
+ed è costituito da:
+- vice primari, di cui interessa la data in cui hanno assunto tale ruolo
+- primari di cui interessa l’elenco delle specializzazioni ottenute.
+Un vice primario può all’occorrenza sostituire il proprio primario per un periodo di tempo definito;
+interessa tenere traccia del sostituto e del periodo temporale di sostituzione
+
+ambulatori/laboratori:
+Ogni ospedale:
+- dispone di propri laboratori/ambulatori per eseguire esami, di cui interessano:
+	- il piano
+	- stanza del reparto nel quale è situato
+- oppure è convenzionato presso laboratori/ambulatori esterni, di cui interessano: 
+	- l’indirizzo
+	- un numero di telefono
+	- l’orario di apertura al pubblico.
+
+esami:
+Gli esami sono caratterizzati da:
+- un codice univoco,
+- una descrizione
+- costo in regime di assistenza sanitaria
+- costo se eseguito provatamente.
+possono essere normali o specialistici
+	nel caso di esami specialistici interessano: 
+	- il medico che li ha prescritti, 
+	- eventuali avvertenze (ad esempio presentarsi a digiuno, seguire una dieta specifica, ecc.)
+
+pazienti:
+Ciascun paziente:
+- è identificato dalla propria tessera sanitaria 
+- è caratterizzato dai propri dati anagrafici
+- può prenotare gli esami di cui necessita;
+- può effettuare nel tempo più prenotazioni relative allo stesso esame ma non nella stessa giornata.
+	per ogni prenotazione interessano: 
+	- data di prenotazione,
+	- data e ora dell’esame,
+	- il laboratorio/ambulatorio presso cui verrà eseguito, 
+	- il regime di costo
+	- l’urgenza secondo una scala predefinita (fascia verde, gialla o rossa).
+		Per ogni paziente ricoverato in un reparto interessano: 
+		- la data di ricovero
+		- le patologie eventualmente presenti
+		per i pazienti dimessi interessa:
+		- la data di dimissione. 
+		un paziente può essere ricoverato più volte nel tempo per le stesse patologie nello stesso reparto.

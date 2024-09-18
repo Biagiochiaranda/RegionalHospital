@@ -1,0 +1,127 @@
+--per aggiornare il numero di dipendenti di un prontosoccorso in funzione di inserimenti o delete:
+
+create or replace function aggiornaps()
+returns trigger as $$
+begin
+	if new.codice_ospedaliero ilike 'md%' then		
+		insert into personalemedicops values(new.codice_ospedaliero);
+		
+		update prontosoccorso
+		set numero_dipendenti = numero_dipendenti + 1
+		where indirizzo = new.indirizzo_ps;
+	else		
+		insert into personaleparamedicops values(new.codice_ospedaliero);
+		
+		update prontosoccorso
+		set numero_dipendenti = numero_dipendenti + 1
+		where indirizzo = new.indirizzo_ps;
+	end if;
+	
+	return new;
+end;
+$$ language 'plpgsql';
+
+create trigger numero_dipendenti
+after insert
+on personaleps
+for each row
+execute procedure aggiornaps();
+
+create or replace function pers_delete()
+returns trigger as $$
+begin
+	update prontosoccorso
+	set numero_dipendenti = numero_dipendenti - 1
+	where indirizzo = old.indirizzo_ps;
+	
+	return new;
+end;
+$$ language 'plpgsql';
+
+create trigger delete_personale
+after delete
+on personaleps
+for each row
+execute procedure pers_delete();
+
+aggiornamento personale dei reparti:
+create or replace function setnullpr()
+returns trigger as $$
+begin
+	if old.codice_ospedaliero ilike 'pr%' then
+		if new.stato = 'disoccupato' or new.stato = 'in pensione' then
+			update primario
+			set nome_reparto = null, cod_ospedale = null
+			where cod_ospedaliero = old.codice_ospedaliero;		
+		end if;
+	end if;
+	
+	if old.codice_ospedaliero ilike 'vp%' then
+		if new.stato = 'disoccupato' or new.stato = 'in pensione' then
+			update viceprimario
+			set nome_reparto = null, cod_ospedale = null, data_assunzione = null
+			where cod_ospedaliero = old.codice_ospedaliero;		
+		end if;
+	end if;
+	
+	return new;
+end;
+$$ language 'plpgsql';
+
+create trigger aggiorna_primario
+after update of stato
+on personalereparto
+for each row
+execute procedure setnullpr();
+
+create or replace function aff_upd()
+returns trigger as $$
+begin
+	if new.stato = 'disoccupato' then
+		update afferenzareparto
+		set data_fine = current_date
+		where cod_personale = old.codice_ospedaliero;
+	end if;
+	
+	return new;
+end;
+$$ language 'plpgsql';
+
+create trigger aggiorna_afferenza
+after update of stato
+on personalereparto
+for each row
+execute procedure aff_upd();
+
+
+
+
+
+
+__________________________________________________
+DELIMITER $$
+
+CREATE TRIGGER LimitTirocinantiPerMedico
+BEFORE INSERT ON Tirocinante
+FOR EACH ROW
+BEGIN
+    DECLARE num_tirocinanti INT;
+
+    -- Contare il numero di tirocinanti attivi per il medico referente
+    SELECT COUNT(*) INTO num_tirocinanti
+    FROM Tirocinante
+    WHERE IDMedicoReferente = NEW.IDMedicoReferente
+      AND StatoTirocinio = 'in corso'
+      AND (
+        (NEW.DataInizio BETWEEN DataInizio AND DataFine) OR
+        (NEW.DataFine BETWEEN DataInizio AND DataFine)
+      );
+
+    -- Verificare se il numero di tirocinanti è inferiore a 3
+    IF num_tirocinanti >= 3 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Il medico referente ha già tre tirocinanti attivi nel periodo specificato.';
+    END IF;
+END$$
+
+DELIMITER ;

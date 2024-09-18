@@ -1,0 +1,17 @@
+personale ospedaliero
+('BNCMTT67H27B300A', 'bianchi', 'matteo', 'busto arsizio', 'VA', '1967-06-27', '[odice ospedaliero]')
+('VRDLSE76A67L702L', 'verdi', 'elisa', 'vecchiano', 'PI', '1976-01-27', '[codice ospedaliero]')
+('GLLMRC81D21B641X', 'gialli', 'marco', 'canzo', 'CO', '1981-04-21', '[codice ospedaliero]')
+('BLULSN89T59A473Y', 'blu', 'alessandra', 'assago', 'MI', '1989-12-19', '[codice ospedaliero]')
+('RSSGDM83T30D390T', 'rossi', 'giandomenico', 'eboli', 'SA', '1983-12-30', '[codice ospedaliero]')
+('RSSNMR70A70L523P', 'rossini', 'annamaria', 'vaccarizza', 'PV', '1970-01-30', '[codice ospedaliero]')
+
+pazienti o altri
+('RNCFBA99B28D259M', 'arancioni', 'fabio', 'decimomannu', 'CA', '1999-02-28', '[altre info]')
+('VRDCST00F30H647A', 'verdi', 'cristina', 'sabaudia', 'LT', '2000-01-30', '[altre info]')
+('GLLRRA98F64C801I', 'gialli', 'aurora', 'coassolo', 'TO', '1998-08-24', '[altre info]')
+('GLLNTN98P12E776V', 'giallini', 'antonio', 'maccagno inferiore', 'VA', '1998-09-12', '[altre info]')
+('RSSLSS88L28D242S', 'rossi', 'alessio', 'dagnente', 'NO', '1988-07-28', '[altre info]')
+('CLSMRZ11T71D416T', 'celeste', 'maurizia', 'erba', 'CO', '2011-12-31', '[altre info]')
+
+ricordati di inserire anche il ";"

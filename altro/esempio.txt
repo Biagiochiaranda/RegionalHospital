@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizzazione Medici</title>
+    <style type="text/css">
+        form {
+            position: absolute;
+            top: 40%;
+            left: 20%;
+        }
+        select {
+            background-color: grey;
+            font-size: 200%;
+            padding: 8px;
+            margin: 1px;
+        }
+        button {
+            font-size: 200%;
+            padding: 8px;
+            margin: 1px;
+        }
+        .warning {
+            position: absolute;
+            top: 30%;
+            left: 15%;
+            font-size: 400%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<?php
+$conn = "host=localhost port=5432 dbname=ospedali_regionali user=postgres password=unimi";
+
+if (isset($_POST['reparto'])) {
+    $resconn = pg_connect($conn);
+
+    if ($resconn === false) {
+        echo "Problemi di connessione, errore: " . pg_last_error();
+        exit;
+    }
+
+    $reparto = pg_escape_string($resconn, $_POST['reparto']);
+    
+    // Query per ottenere i medici assunti che hanno svolto il tirocinio nello stesso reparto
+    $stm = "SELECT m.nome, m.cognome, t.reparto, t.data_inizio, t.data_fine
+            FROM medici m
+            INNER JOIN tirocini t ON m.id = t.medico_id
+            WHERE t.reparto = '$reparto'";
+    $quer = pg_query($resconn, $stm);
+
+    if ($quer === false) {
+        echo "Errore nell'esecuzione della query: " . pg_last_error();
+        exit;
+    }
+
+    $campi = pg_num_fields($quer);
+    
+    echo "<table>";
+    echo "<tr>";
+    for ($i = 0; $i < $campi; $i++) {
+        $fieldname = pg_field_name($quer, $i);
+        echo "<th>" . htmlspecialchars($fieldname) . "</th>";
+    }
+    echo "</tr>";
+    
+    while ($row = pg_fetch_array($quer, null, PGSQL_ASSOC)) {
+        echo "<tr>";
+        foreach ($row as $cell) {
+            echo "<td>" . htmlspecialchars($cell) . "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+
+    pg_close($resconn);
+} else {
+    $resconn = pg_connect($conn);
+
+    if ($resconn === false) {
+        echo "Problemi di connessione, errore: " . pg_last_error();
+        exit;
+    }
+
+    // Query per ottenere l'elenco dei reparti
+    $statement = "SELECT DISTINCT reparto FROM tirocini ORDER BY reparto";
+    $query = pg_query($resconn, $statement);
+
+    if ($query === false) {
+        echo "Problemi con l'esecuzione di una richiesta da parte del database: " . pg_last_error();
+        exit;
+    }
+
+    echo "<form method='POST' action=''>";
+    echo "<select name='reparto'>";
+    while ($tupla = pg_fetch_array($query, null, PGSQL_ASSOC)) {
+        echo "<option value='" . htmlspecialchars($tupla['reparto']) . "'>" . htmlspecialchars($tupla['reparto']) . "</option>";
+    }
+    echo "</select>";
+    echo "<button type='submit'>Invio</button>";
+    echo "</form>";
+
+    pg_close($resconn);
+}
+?>
+</body>
+</html>

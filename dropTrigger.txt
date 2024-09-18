@@ -1,0 +1,9 @@
+drop trigger numero_dipendenti on personaleps;
+drop trigger delete_personale on personaleps;
+drop trigger aggiorna_primario on personalereparto;
+drop trigger aggiorna_afferenza on personalereparto;
+
+drop function aggiornaps();
+drop function inserimentopr();
+drop function pers_delete();
+drop function setnullpr()
